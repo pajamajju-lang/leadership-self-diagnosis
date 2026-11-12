@@ -1,0 +1,942 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>팀장 리더십 셀프진단</title>
+<meta name="description" content="상황형 20문항으로 리더십 행동을 돌아보고, 성찰 인터뷰로 유지할 행동, 변화시킬 행동, 2027 리더십 선언을 정리합니다.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap">
+<style>
+/* Layout: one reading column in four stages (진단 → 결과 → 인터뷰 → 성찰 카드) with a sticky stage bar */
+:root {
+  --bg: #F4F6FA;
+  --surface: #FFFFFF;
+  --ink: #161C2D;
+  --muted: #5A6377;
+  --line: #DCE1EB;
+  --accent: #2847B8;
+  --accent-ink: #FFFFFF;
+  --accent-soft: #E5EAFA;
+  --low: #B9531A;
+  --low-soft: #FBEADF;
+  --good: #1F7A55;
+  --good-soft: #E1F2EA;
+  --font-body: "IBM Plex Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", "맑은 고딕", system-ui, sans-serif;
+  --font-num: "IBM Plex Mono", ui-monospace, Consolas, monospace;
+  --radius: 10px;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #10131B; --surface: #181C27; --ink: #E8EBF3; --muted: #9AA3B8; --line: #2B3244;
+    --accent: #8EA5FF; --accent-ink: #10131B; --accent-soft: #232B4D;
+    --low: #F2A06A; --low-soft: #3A2619; --good: #6FD3A4; --good-soft: #17322A;
+    color-scheme: dark;
+  }
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0; background: var(--bg); color: var(--ink);
+  font-family: var(--font-body); font-size: 16px; line-height: 1.65;
+  word-break: keep-all; overflow-wrap: break-word;
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+.wrap {
+  max-width: 780px; margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+h1, h2, h3 { text-wrap: balance; margin: 0; line-height: 1.3; }
+p { margin: 0; }
+[hidden] { display: none !important; }
+button, input, textarea { font: inherit; color: inherit; }
+button { cursor: pointer; }
+:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+
+/* Header */
+header.intro { padding-block: 48px 28px; display: grid; gap: 18px; }
+.eyebrow { font-size: 13px; font-weight: 600; letter-spacing: .08em; color: var(--accent); }
+h1 { font-size: clamp(28px, 6vw, 38px); font-weight: 700; letter-spacing: -.02em; }
+.lede { color: var(--muted); max-width: 62ch; }
+.guide { display: grid; gap: 10px; padding: 18px 20px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); }
+.guide ol { margin: 0; padding-left: 20px; display: grid; gap: 4px; }
+.guide strong { font-weight: 600; }
+
+/* Sticky stage bar */
+.bar { position: sticky; top: 0; z-index: 5; background: var(--surface); border-bottom: 1px solid var(--line); padding-top: env(safe-area-inset-top, 0px); }
+.bar .wrap { display: flex; align-items: center; gap: 14px; padding-block: 10px; }
+.stages { flex: 1; min-width: 0; display: grid; gap: 6px; }
+.stage-list { display: flex; gap: 4px 14px; flex-wrap: wrap; font-size: 13px; color: var(--muted); }
+.stage-list a { color: inherit; text-decoration: none; }
+.stage-list a.on { color: var(--ink); font-weight: 600; }
+.stage-list a.done::before { content: "✓ "; color: var(--good); }
+.stage-list b { font-family: var(--font-num); font-weight: 600; }
+.track { height: 6px; border-radius: 3px; background: var(--line); overflow: hidden; }
+.track i { display: block; height: 100%; width: 0; background: var(--accent); transition: width .25s ease; }
+.btn { border: 1px solid var(--line); background: var(--surface); color: var(--ink); padding: 9px 14px; border-radius: 8px; font-size: 14px; font-weight: 600; white-space: nowrap; }
+.btn.primary { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+.btn:hover { border-color: var(--accent); }
+.btn:disabled { opacity: .45; cursor: not-allowed; }
+
+/* Stage headings */
+.stage { display: grid; gap: 16px; padding-block: 36px 8px; scroll-margin-top: 70px; }
+.stage-head { display: grid; gap: 6px; padding-bottom: 8px; border-bottom: 2px solid var(--ink); }
+.stage-head .step { font-family: var(--font-num); font-size: 13px; font-weight: 600; color: var(--accent); letter-spacing: .04em; }
+.stage-head h2 { font-size: 26px; font-weight: 700; }
+.stage-head p { color: var(--muted); font-size: 14.5px; }
+
+/* Diagnosis */
+.domain { display: grid; gap: 12px; margin-top: 18px; scroll-margin-top: 80px; }
+.domain-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 10px; }
+.domain-head .code { font-family: var(--font-num); font-size: 13px; color: var(--accent); font-weight: 600; }
+.domain-head h3 { font-size: 20px; font-weight: 700; }
+.domain-head span.sub { font-size: 13.5px; color: var(--muted); }
+.item { display: grid; gap: 12px; padding: 18px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); scroll-margin-top: 90px; }
+.item.missing { border-color: var(--low); }
+.item-q { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 12px; }
+.num { font-family: var(--font-num); font-weight: 600; font-size: 14px; color: var(--muted); min-width: 2ch; padding-top: 2px; font-variant-numeric: tabular-nums; }
+.item.done .num { color: var(--accent); }
+.item-label { font-size: 13px; font-weight: 600; color: var(--muted); display: block; }
+.scene { font-size: 16px; }
+.scene em { font-style: normal; font-weight: 600; }
+fieldset { border: 0; margin: 0; padding: 0; min-width: 0; }
+.opts { display: grid; gap: 8px; }
+.opts input { position: absolute; opacity: 0; pointer-events: none; }
+.opts label {
+  display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 10px; align-items: start;
+  padding: 11px 14px; border: 1px solid var(--line); border-radius: 8px; cursor: pointer; background: var(--surface);
+  font-size: 15px; line-height: 1.55; transition: background .15s, border-color .15s;
+}
+.opts label .mk { font-family: var(--font-num); font-weight: 600; color: var(--muted); }
+.opts label:hover { border-color: var(--accent); }
+.opts input:focus-visible + label { outline: 3px solid var(--accent); outline-offset: 2px; }
+.opts input:checked + label { background: var(--accent-soft); border-color: var(--accent); }
+.opts input:checked + label .mk { color: var(--accent); }
+
+/* Results */
+.empty { display: grid; gap: 12px; justify-items: start; padding: 22px; border: 1px dashed var(--line); border-radius: var(--radius); color: var(--muted); }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 20px; display: grid; gap: 14px; }
+.card h3 { font-size: 17px; font-weight: 700; }
+.hint { font-size: 14px; color: var(--muted); }
+.note { font-size: 14px; padding: 10px 14px; border-radius: 8px; background: var(--accent-soft); }
+.summary { font-size: 17px; line-height: 1.7; }
+.summary b { font-weight: 600; }
+
+.bars { display: grid; gap: 14px; }
+.bar-row { display: grid; grid-template-columns: 84px minmax(0, 1fr) 48px; gap: 12px; align-items: center; }
+.bar-row .name { font-weight: 600; font-size: 15px; }
+.bar-row .val { font-family: var(--font-num); font-weight: 600; font-size: 18px; text-align: right; font-variant-numeric: tabular-nums; }
+.bar-track { position: relative; height: 14px; border-radius: 7px; background: var(--bg); border: 1px solid var(--line); }
+.bar-track i { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 7px; background: var(--accent); }
+.bar-row.low .bar-track i { background: var(--low); }
+.bar-row.low .val { color: var(--low); }
+.axis { display: grid; grid-template-columns: 84px minmax(0, 1fr) 48px; gap: 12px; }
+.axis div { grid-column: 2; display: flex; justify-content: space-between; font-family: var(--font-num); font-size: 12px; color: var(--muted); }
+
+.dcards { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.dcard { border: 1px solid var(--line); border-radius: var(--radius); padding: 16px; display: grid; gap: 10px; align-content: start; background: var(--surface); }
+.dcard.low { border-color: var(--low); }
+.dcard-head { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+.dcard-head b { font-size: 16px; }
+.dcard-head .score { font-family: var(--font-num); font-weight: 600; }
+.pill { font-size: 12px; font-weight: 600; padding: 1px 8px; border-radius: 999px; white-space: nowrap; }
+.pill.strong { background: var(--good-soft); color: var(--good); }
+.pill.mid { background: var(--accent-soft); color: var(--accent); }
+.pill.low { background: var(--low-soft); color: var(--low); }
+dl.fb { margin: 0; display: grid; gap: 8px; font-size: 14.5px; }
+dl.fb dt { font-size: 12.5px; font-weight: 600; color: var(--muted); }
+dl.fb dd { margin: 0; }
+dl.fb dd.quote { font-style: normal; color: var(--ink); }
+
+.lowest { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+.lowest > li { display: grid; gap: 8px; padding: 14px 16px; border-radius: 8px; background: var(--bg); }
+.lowest .top { display: flex; justify-content: space-between; gap: 10px; align-items: baseline; }
+.lowest .top b { font-weight: 600; }
+.lowest .meta { font-size: 13px; color: var(--muted); }
+.lowest .score { font-family: var(--font-num); font-weight: 600; color: var(--low); white-space: nowrap; }
+
+.reflect { margin: 0; padding-left: 20px; display: grid; gap: 6px; }
+
+/* Interview */
+.focus-pick { display: flex; flex-wrap: wrap; gap: 8px; }
+.focus-pick button { border: 1px solid var(--line); background: var(--surface); padding: 8px 14px; border-radius: 999px; font-size: 14px; font-weight: 500; }
+.focus-pick button[aria-pressed="true"] { background: var(--ink); color: var(--surface); border-color: var(--ink); }
+.iv { display: grid; gap: 14px; }
+.ivq { display: grid; gap: 12px; padding: 18px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); }
+.ivq .qn { font-family: var(--font-num); font-size: 12.5px; font-weight: 600; color: var(--accent); letter-spacing: .04em; }
+.ivq h4 { margin: 0; font-size: 17px; font-weight: 600; line-height: 1.5; text-wrap: balance; }
+.ivq textarea, .field textarea, .field input {
+  width: 100%; padding: 10px 12px; border: 1px solid var(--line); border-radius: 8px; background: var(--bg);
+  font-size: 15px; line-height: 1.6; resize: vertical;
+}
+.ivq textarea { min-height: 64px; }
+.ack { font-size: 14.5px; padding: 10px 14px; border-left: 3px solid var(--accent); background: var(--accent-soft); border-radius: 0 8px 8px 0; }
+
+/* Reflection card */
+.rcard { background: var(--surface); border: 2px solid var(--ink); border-radius: var(--radius); padding: 24px; display: grid; gap: 18px; }
+.rcard-head { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 16px; align-items: end; }
+.rcard-head h3 { font-size: 21px; }
+.rcard-head .who { display: flex; gap: 8px; align-items: center; font-size: 14px; color: var(--muted); }
+.rcard-head .who input { width: 140px; padding: 6px 10px; border: 1px solid var(--line); border-radius: 6px; background: var(--bg); }
+.field { display: grid; gap: 6px; }
+.field > label, .field > .flabel { font-size: 13px; font-weight: 700; letter-spacing: .02em; color: var(--accent); }
+.field textarea { min-height: 78px; }
+.pattern { font-size: 15.5px; padding: 12px 14px; background: var(--bg); border-radius: 8px; }
+.drafts { display: grid; gap: 8px; }
+.drafts button { text-align: left; border: 1px dashed var(--line); background: var(--surface); padding: 10px 14px; border-radius: 8px; font-size: 15px; }
+.drafts button:hover { border-color: var(--accent); }
+.decl textarea { font-size: 18px; font-weight: 600; min-height: 64px; }
+.row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.status { font-size: 14px; color: var(--good); font-weight: 600; }
+details.ai { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 14px 18px; }
+details.ai summary { cursor: pointer; font-weight: 600; }
+details.ai[open] { display: grid; gap: 12px; }
+details.ai textarea { width: 100%; min-height: 220px; padding: 12px; border: 1px solid var(--line); border-radius: 8px; background: var(--bg); font-size: 13.5px; line-height: 1.6; }
+.confirm { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; font-size: 14px; }
+footer { padding-block: 32px 48px; font-size: 13px; color: var(--muted); display: grid; gap: 12px; }
+
+@media (max-width: 600px) {
+  .dcards { grid-template-columns: 1fr; }
+  .bar-row, .axis { grid-template-columns: 70px minmax(0, 1fr) 42px; gap: 10px; }
+  .item, .ivq { padding: 16px 14px; }
+  .rcard { padding: 18px; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } html { scroll-behavior: auto; } }
+@media print {
+  .no-print, .bar, header.intro, #stage1, #stage3, footer, details.ai { display: none !important; }
+  body { background: #fff; color: #000; font-size: 12.5px; }
+  .stage { padding-block: 10px 0; }
+  .card, .dcard, .rcard { break-inside: avoid; }
+  .rcard textarea, .rcard input { border: 0; background: transparent; resize: none; padding: 0; }
+  #stage4 { break-before: page; }
+}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="intro">
+    <span class="eyebrow">LEADERSHIP SELF-DIAGNOSIS</span>
+    <h1>팀장 리더십 셀프진단</h1>
+    <p class="lede">구성원의 몰입은 리더가 매일 내리는 작은 선택에서 시작됩니다. 20개 상황에서 내가 실제로 할 행동을 고르고, 결과를 바탕으로 짧은 성찰 인터뷰를 거쳐 나의 리더십 다짐을 정리해 보세요. 약 20분이 걸립니다.</p>
+    <div class="guide">
+      <ol>
+        <li><strong>진단</strong> 20개 상황에서 내가 실제로 할 행동을 하나씩 고릅니다.</li>
+        <li><strong>결과</strong> 영역별 점수와 피드백, 돌아볼 행동을 확인합니다.</li>
+        <li><strong>인터뷰</strong> 성찰 영역에 대한 4개의 질문에 답합니다.</li>
+        <li><strong>성찰 카드</strong> 유지할 행동, 변화시킬 행동, 2027 리더십 선언을 정리하고 인쇄합니다.</li>
+      </ol>
+      <p><strong>되고 싶은 모습이 아니라, 최근 한 달 동안 실제로 했을 행동을 골라 주세요.</strong> 정답을 맞히는 시험이 아닙니다. 응답은 이 기기의 브라우저에만 저장되고 어디에도 전송되지 않습니다.</p>
+    </div>
+  </header>
+</div>
+
+<nav class="bar" aria-label="진행 단계">
+  <div class="wrap">
+    <div class="stages">
+      <div class="stage-list">
+        <a href="#stage1" id="nav1">1 진단 <b id="countNum">0</b>/20</a>
+        <a href="#stage2" id="nav2">2 결과</a>
+        <a href="#stage3" id="nav3">3 인터뷰</a>
+        <a href="#stage4" id="nav4">4 성찰 카드</a>
+      </div>
+      <div class="track"><i id="trackFill"></i></div>
+    </div>
+    <button class="btn primary" id="nextBtn" type="button">다음 단계</button>
+  </div>
+</nav>
+
+<div class="wrap">
+
+  <!-- 1. Diagnosis -->
+  <section class="stage" id="stage1">
+    <div class="stage-head">
+      <span class="step">STEP 1</span>
+      <h2>상황 진단</h2>
+      <p>각 상황에서 내가 실제로 할 행동에 가장 가까운 것을 고르세요. 네 가지 모두 현장에서 흔히 볼 수 있는 행동입니다.</p>
+    </div>
+    <div id="questions"></div>
+  </section>
+
+  <!-- 2. Results -->
+  <section class="stage" id="stage2" aria-live="polite">
+    <div class="stage-head">
+      <span class="step">STEP 2</span>
+      <h2>진단 결과</h2>
+      <p>영역 점수는 5개 상황의 평균(1~4점)입니다. 점수가 낮다고 부족한 리더라는 뜻은 아닙니다. 이번에 돌아볼 지점을 찾는 데 쓰세요.</p>
+    </div>
+
+    <div class="empty" id="emptyState">
+      <p id="emptyMsg">20개 상황에 모두 답하면 이곳에 결과가 나타납니다.</p>
+      <button class="btn no-print" id="exampleBtn" type="button">예시 응답으로 미리보기</button>
+    </div>
+
+    <div id="resultBody" hidden style="display:grid; gap:18px;">
+      <p class="note" id="exampleNote" hidden>지금 보이는 결과는 예시 응답입니다. 상황 문항을 직접 고르면 내 결과로 바뀝니다.</p>
+
+      <div class="card">
+        <h3>한 줄 종합</h3>
+        <p class="summary" id="summary"></p>
+      </div>
+
+      <div class="card">
+        <h3>영역별 점수</h3>
+        <div class="bars" id="bars"></div>
+        <div class="axis"><div><span>1</span><span>2</span><span>3</span><span>4</span></div></div>
+      </div>
+
+      <div class="card">
+        <h3>영역별 피드백</h3>
+        <p class="hint">점수 구간에 따라 지금의 모습, 팀원이 느낄 수 있는 것, 이번 주에 해볼 행동을 정리했습니다.</p>
+        <div class="dcards" id="dcards"></div>
+      </div>
+
+      <div class="card">
+        <h3>내 선택 되짚기</h3>
+        <p class="hint">점수가 가장 낮았던 상황 3개입니다. 내가 고른 행동이 팀원에게 어떻게 닿을 수 있는지 살펴보세요.</p>
+        <ol class="lowest" id="lowest"></ol>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. Interview -->
+  <section class="stage" id="stage3">
+    <div class="stage-head">
+      <span class="step">STEP 3</span>
+      <h2>성찰 인터뷰</h2>
+      <p>한 영역을 골라 최근 경험을 떠올리며 4개의 질문에 답합니다. 보기를 고르고, 떠오르는 장면은 메모 칸에 적어 두세요. 팀원 이름 대신 "팀원 A"처럼 적어 주세요.</p>
+    </div>
+    <div class="empty" id="ivEmpty"><p>진단을 마치면 인터뷰를 시작할 수 있습니다.</p></div>
+    <div id="ivBody" hidden style="display:grid; gap:16px;">
+      <div class="card">
+        <h3>성찰할 영역</h3>
+        <p class="hint" id="focusHint"></p>
+        <div class="focus-pick" id="focusPick" role="group" aria-label="성찰 영역 선택"></div>
+        <div>
+          <p class="hint" style="font-weight:600;">이 영역에서 생각해 볼 질문</p>
+          <ul class="reflect" id="reflectQs"></ul>
+        </div>
+      </div>
+      <div class="iv" id="iv"></div>
+    </div>
+  </section>
+
+  <!-- 4. Reflection card -->
+  <section class="stage" id="stage4">
+    <div class="stage-head">
+      <span class="step">STEP 4</span>
+      <h2>나의 리더십 성찰 카드</h2>
+      <p>인터뷰 답변으로 초안을 채워 두었습니다. 내 말로 고쳐 쓰고, 인쇄하거나 PDF로 저장해 가져가세요.</p>
+    </div>
+    <div class="empty" id="cardEmpty"><p>인터뷰 4개 질문에 답하면 성찰 카드가 만들어집니다.</p></div>
+    <div id="cardBody" hidden style="display:grid; gap:16px;">
+      <div class="rcard">
+        <div class="rcard-head">
+          <h3>나의 리더십 성찰 카드</h3>
+          <div class="who"><label for="whoName">이름</label><input id="whoName" type="text" autocomplete="off"><span id="today"></span></div>
+        </div>
+        <div class="field">
+          <span class="flabel">진단에서 본 나</span>
+          <p class="pattern" id="cardScores"></p>
+        </div>
+        <div class="field">
+          <span class="flabel">인터뷰에서 발견한 나의 패턴</span>
+          <p class="pattern" id="cardPattern"></p>
+        </div>
+        <div class="field">
+          <label for="keepText">유지할 리더십 행동</label>
+          <textarea id="keepText"></textarea>
+        </div>
+        <div class="field">
+          <label for="changeText">변화시킬 리더십 행동 (다음 2주 동안)</label>
+          <textarea id="changeText"></textarea>
+        </div>
+        <div class="field decl">
+          <label for="declText">2027년 나의 리더십 선언</label>
+          <div class="drafts no-print" id="drafts"></div>
+          <textarea id="declText" placeholder="초안을 누르면 이곳에 채워집니다. 내 말로 고쳐 쓰세요."></textarea>
+        </div>
+      </div>
+      <div class="row no-print">
+        <button class="btn primary" id="printBtn" type="button">인쇄 / PDF 저장</button>
+        <button class="btn" id="copyCardBtn" type="button">성찰 카드 텍스트 복사</button>
+        <span class="status" id="copyCardStatus" role="status"></span>
+      </div>
+
+      <details class="ai no-print">
+        <summary>AI 도구로 더 깊게 성찰하고 싶다면</summary>
+        <p class="hint">아래 프롬프트에는 내 진단 결과와 인터뷰 답변이 들어 있습니다. 복사해서 사내에서 쓰는 AI 도구에 붙여넣으면 이어서 인터뷰할 수 있습니다.</p>
+        <textarea id="aiPrompt" readonly aria-label="AI 인터뷰 프롬프트"></textarea>
+        <div class="row"><button class="btn" id="copyAiBtn" type="button">프롬프트 복사</button><span class="status" id="copyAiStatus" role="status"></span></div>
+      </details>
+    </div>
+  </section>
+
+  <footer class="no-print">
+    <div class="row" id="resetArea"><button class="btn" id="resetBtn" type="button">응답 모두 지우기</button></div>
+    <p>응답은 이 기기의 브라우저에만 저장됩니다. 공용 PC라면 마친 뒤 "응답 모두 지우기"를 눌러 주세요.</p>
+  </footer>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  /* ---------- Content ---------- */
+  var STYLE_NAMES = ["직접 방향을 정해 주는 방식", "질문으로 함께 답을 찾는 방식", "마음을 먼저 살피는 방식", "믿고 맡기는 방식"];
+
+  var DOMAINS = [
+    {
+      code: "A", name: "사람관리", en: "People Management", sub: "커뮤니케이션 · 피드백 · 감성지능(EQ)",
+      strongPhrase: "팀원의 이야기를 듣고 마음을 살피는 데", weakPhrase: "팀원의 이야기를 충분히 듣고 사실을 중심으로 피드백하는 부분",
+      cards: {
+        strong: ["팀원의 이야기를 끝까지 듣고, 사실과 행동을 근거로 피드백하는 습관이 자리 잡혀 있습니다.", "“팀장님께는 편하게 말할 수 있어요.”", "회의에서 팀원끼리도 짧게 서로 피드백하는 시간을 만들어, 이 강점이 팀 전체로 퍼지게 해 보세요."],
+        mid: ["대체로 잘 듣고 배려하지만, 바쁘거나 급할 때는 결론부터 말하거나 확인을 건너뛰기도 합니다.", "“평소엔 잘 들어 주시는데, 급할 땐 말을 꺼내기 어려워요.”", "급하게 지시할 때도 “어떻게 이해했는지 한 번 말해 줄래요?”라고 확인해 보세요."],
+        low: ["일을 빠르게 처리하는 데 집중하다 보니, 팀원의 이야기를 충분히 듣거나 마음을 살피는 시간이 부족한 편입니다.", "“말해 봐야 소용없을 것 같아요.”", "이번 주 1:1 대화에서 내 말보다 팀원의 말이 길어지도록, 질문 두 개를 먼저 던져 보세요."]
+      },
+      reflect: ["최근 팀원과의 대화에서 내가 말한 시간과 들은 시간 중 어느 쪽이 더 길었나요?", "최근에 팀원이 나에게 어려움을 먼저 털어놓은 적이 있었나요?"],
+      drafts: ["나는 끝까지 듣고, 사실로 말하는 리더가 되겠다.", "나는 팀원의 마음을 읽고, 성장을 말로 인정하는 리더가 되겠다."],
+      iv: {
+        q1: ["최근 팀원에게 개선 피드백을 전달했던 상황을 떠올려 주세요. 어떤 상황이었나요?",
+             ["업무 결과물의 품질이 기대에 못 미쳤다", "일정이나 약속을 지키지 않았다", "동료나 고객을 대하는 태도에 문제가 있었다", "같은 실수가 반복되었다"]],
+        q2: ["그 대화에서 내가 가장 신경 쓴 것은 무엇이었나요?",
+             ["무엇을 고쳐야 하는지 정확히 전달하는 것", "팀원이 스스로 문제를 깨닫게 하는 것", "팀원이 상처받지 않게 하는 것", "짧게 말하고 알아서 고치도록 맡기는 것"]],
+        q4: ["같은 상황이 다시 온다면, 무엇을 바꿔 보고 싶나요?",
+             ["구체적인 사실과 행동을 근거로 이야기하기", "내 생각을 말하기 전에 팀원의 생각을 먼저 묻기", "개선할 점과 함께 잘하고 있는 점도 짚어 주기", "대화 뒤 팀원이 이해한 내용을 확인하고 후속 대화 잡기"]]
+      },
+      items: [
+        { n: 1, label: "경청", scene: "주간 회의에서 팀원이 새로운 업무 방식을 제안합니다. 듣다 보니 예전에 시도했다가 잘 안 됐던 방법입니다.",
+          opts: ["시간을 아끼려고 “그거 예전에 해봤는데 안 됐어요”라고 바로 알려준다", "끝까지 들은 뒤, 예전 사례를 들어 어렵다고 설명한다", "끝까지 듣고 좋은 아이디어라고 말한 뒤, 따로 검토하겠다고 한다", "끝까지 듣고, 예전과 무엇이 달라졌는지 먼저 물어본다"],
+          team: "말을 꺼내도 끝까지 듣지 않는다고 느껴, 다음부터는 새로운 제안을 하지 않게 됩니다." },
+        { n: 2, label: "의사소통 확인", scene: "급하게 팀원에게 보고서 수정을 지시했습니다. 팀원은 “네, 알겠습니다”라고만 하고 자리로 돌아갑니다.",
+          opts: ["알겠다고 했으니 결과물을 기다린다", "수정 사항을 메신저로 한 번 더 정리해 보낸다", "“궁금한 점 있으면 언제든 물어보세요”라고 덧붙인다", "어디를 어떻게 고칠지 팀원이 직접 짧게 말해 보도록 한다"],
+          team: "이해하지 못한 채 일을 시작해, 결과물이 기대와 달라지고 다시 하는 일이 생깁니다." },
+        { n: 3, label: "노력·개선 피드백", scene: "팀원이 새 업무 툴을 익히느라 야근까지 하며 애썼지만, 이번 달 실적은 목표에 조금 못 미쳤습니다. 월말 면담에서 당신은?",
+          opts: ["실적을 중심으로 부족한 부분과 다음 달 목표를 이야기한다", "“고생 많았어요”라고 격려하고 다음 달 목표를 이야기한다", "실적 차이를 짚은 뒤, 새 툴을 익히려 노력한 점도 인정한다", "새 툴을 익히면서 달라진 점을 구체적으로 짚어 인정하고, 그 변화를 다음 성과로 잇는 방법을 함께 이야기한다"],
+          team: "결과만 본다고 느껴, 새로운 시도나 학습에 들이는 노력이 줄어듭니다." },
+        { n: 4, label: "감정 고려", scene: "평소 활발하던 팀원이 요즘 회의에서 말이 없고 표정이 어둡습니다. 오늘 그 팀원의 업무에서 실수가 발견됐습니다.",
+          opts: ["실수는 실수이니 평소대로 바로 지적하고 수정을 요청한다", "수정 요청은 하되, 말투를 부드럽게 한다", "실수 이야기를 꺼내기 전에 요즘 괜찮은지 가볍게 묻는다", "따로 시간을 내 요즘 상황을 먼저 듣고, 실수 이야기를 언제 어떻게 꺼낼지 정한다"],
+          team: "내 상황은 신경 쓰지 않는다고 느껴, 어려움이 있어도 말하지 않게 됩니다." },
+        { n: 5, label: "행동 중심 피드백", scene: "팀원이 고객 메일에 늦게 답장한 일이 이번 달에만 세 번째입니다.",
+          opts: ["“책임감을 좀 더 가져야 하지 않겠어요?”라고 말한다", "“요즘 고객 응대가 자꾸 늦네요. 신경 좀 써 주세요”라고 말한다", "늦었던 세 건을 짚고, 앞으로는 빨리 답해 달라고 요청한다", "늦었던 세 건의 날짜와 고객 반응을 사실대로 전하고, 몇 시간 안에 답할지 기준을 함께 정한다"],
+          team: "사람 자체를 평가받는다고 느껴, 개선보다 방어에 힘을 쓰게 됩니다." }
+      ]
+    },
+    {
+      code: "B", name: "성과관리", en: "Performance Management", sub: "목표 설정 · 실행 점검 · 성과 개선",
+      strongPhrase: "목표를 분명히 하고 과정을 챙기는 데", weakPhrase: "기대 수준을 맞추고 진행을 점검하는 부분",
+      cards: {
+        strong: ["목표와 기대 수준을 분명히 하고, 진행 과정을 적절히 점검하며 함께 개선점을 찾습니다.", "“무엇을 기대하시는지 알아서 일하기 편해요.”", "다음 중간 점검은 팀원이 먼저 진행 상황을 정리해 오게 해서, 점검을 팀원이 이끌도록 해 보세요."],
+        mid: ["목표는 대체로 공유하지만, 기대 수준이나 중간 점검이 상황에 따라 들쭉날쭉합니다.", "“어떤 땐 자세히 봐 주시는데, 어떤 땐 마감 때만 확인하세요.”", "이번 주에 맡기는 일 하나에 중간 점검 날짜를 미리 정해 두세요."],
+        low: ["팀원을 믿고 맡기지만, 기대 수준과 중간 점검이 말로 정리되지 않는 경우가 많습니다.", "“무엇을 기대하시는지 모르겠어요. 이 방향이 맞나요?”", "다음에 일을 맡길 때 “이 자료는 ○○ 결정에 쓰여요. 이 정도면 충분해요”라고 한 문장 덧붙여 보세요."]
+      },
+      reflect: ["최근 맡긴 일 중에 팀원이 내 기대와 다르게 해 온 일이 있었나요? 그때 나는 무엇을 설명하지 않았나요?", "팀원은 나에게 진행 상황을 먼저 말하기 편하다고 느낄까요?"],
+      drafts: ["나는 기대를 분명히 말하고, 과정에서 함께 뛰는 리더가 되겠다.", "나는 결과보다 원인을 먼저 묻는 리더가 되겠다."],
+      iv: {
+        q1: ["최근 기대한 성과가 나오지 않았던 업무를 떠올려 주세요. 어떤 상황이었나요?",
+             ["목표나 기대 수준이 처음부터 서로 달랐다", "중간에 문제가 생겼는데 늦게 알았다", "일정이나 자원이 부족했다", "팀원의 역량이나 경험이 부족했다"]],
+        q2: ["그때 팀장으로서 나는 주로 어떻게 대응했나요?",
+             ["직접 방향을 다시 잡고 해야 할 일을 정해 주었다", "무엇이 문제였는지 팀원에게 묻고 함께 찾았다", "팀원이 너무 부담 갖지 않도록 다독였다", "팀원이 스스로 만회하도록 맡겨 두었다"]],
+        q4: ["같은 상황이 다시 온다면, 무엇을 바꿔 보고 싶나요?",
+             ["일을 맡길 때 목적과 기대 수준을 분명히 말하기", "마감 전에 중간 점검 시점을 미리 정해 두기", "결과가 나쁠 때 사람보다 원인을 먼저 확인하기", "일이 끝난 뒤 팀원과 함께 개선 과제를 정리하기"]]
+      },
+      items: [
+        { n: 6, label: "목표 명확화", scene: "팀원에게 다음 달 경영회의에 올릴 시장 분석 자료를 맡기려 합니다.",
+          opts: ["“시장 분석 자료 좀 준비해 주세요. 어떤 건지 알죠?”라고 맡긴다", "마감일과 분량을 알려준다", "마감일과 분량, 참고할 이전 자료를 알려준다", "이 자료가 어떤 결정에 쓰이는지, 어느 수준이면 충분한지 설명하고 팀원이 이해한 내용을 확인한다"],
+          team: "무엇이 충분한지 몰라, 너무 많이 하거나 엉뚱한 방향으로 일하게 됩니다." },
+        { n: 7, label: "우선순위 공유", scene: "분기 말에 긴급 업무 두 건이 동시에 들어와, 팀원들이 무엇부터 해야 할지 묻습니다.",
+          opts: ["둘 다 중요하니 각자 최선을 다해 달라고 한다", "담당자마다 개별적으로 먼저 할 일을 알려준다", "우선순위를 정해 팀 전체에 공유한다", "우선순위와 그 이유, 뒤로 미뤄도 되는 일까지 팀 전체에 공유한다"],
+          team: "모든 일이 급해 보여, 정작 중요한 일에 집중하지 못하고 지칩니다." },
+        { n: 8, label: "진행 점검·지원", scene: "2주 마감 프로젝트를 맡긴 지 일주일이 지났는데, 팀원에게서 아무 보고가 없습니다.",
+          opts: ["알아서 잘하고 있으리라 믿고 마감 때 확인한다", "지금까지의 진행 상황을 정리해 보고하라고 요청한다", "진행 상황을 묻고, 늦어지는 부분이 있으면 일정을 다시 잡는다", "잠깐 만나 진행 상황과 막힌 점을 묻고, 내가 도울 일을 함께 정한다"],
+          team: "막혀도 먼저 말을 꺼내기 어려워, 혼자 끙끙대다 마감을 맞게 됩니다." },
+        { n: 9, label: "성과 원인 확인", scene: "평소 성실한 팀원이 맡은 프로젝트의 매출이 목표의 70%에 그쳤습니다.",
+          opts: ["이번에는 의지가 부족했던 것 같다고 보고 분발을 요청한다", "다음에는 더 잘해 보자고 격려하고 넘어간다", "왜 목표에 못 미쳤다고 생각하는지 팀원에게 묻는다", "시장 상황, 자원, 일정, 역량 중 어디에서 차이가 났는지 자료와 대화로 함께 확인한다"],
+          team: "능력이나 태도를 의심받는다고 느껴, 실패를 숨기거나 위축됩니다." },
+        { n: 10, label: "개선 과제 도출", scene: "신제품 출시 행사가 끝났습니다. 반응은 괜찮았지만 준비 과정에서 혼선이 많았습니다.",
+          opts: ["결과가 괜찮았으니 수고했다고 말하고 마무리한다", "내가 느낀 개선점을 정리해 팀에 공유한다", "팀원들에게 개선점을 각자 적어 내도록 한다", "회고 회의를 열어 잘된 점과 개선점을 함께 정리하고, 다음 행사에 적용할 과제와 담당자를 정한다"],
+          team: "같은 문제가 반복되고, 배운 것이 팀의 경험으로 쌓이지 않습니다." }
+      ]
+    },
+    {
+      code: "C", name: "조직관리", en: "Organization Management", sub: "동기부여 · 갈등 관리 · 조직 문화",
+      strongPhrase: "팀의 분위기와 협력을 만드는 데", weakPhrase: "팀원 각자의 동기와 팀의 협력을 살피는 부분",
+      cards: {
+        strong: ["팀원 각자의 동기를 이해하고, 갈등과 협업을 조율하며 서로 존중하는 분위기를 만들고 있습니다.", "“우리 팀은 서로 믿고 일할 수 있어요.”", "팀이 잘 협력한 사례를 회의에서 구체적으로 짚어 인정해 보세요."],
+        mid: ["팀 분위기를 챙기지만, 갈등이나 역할 문제는 드러난 뒤에야 다루는 편입니다.", "“문제가 커지기 전에 정리됐으면 좋겠어요.”", "함께 하는 과제를 시작할 때 역할과 공유 시점을 5분만 정리해 보세요."],
+        low: ["업무 처리에 집중하다 보니, 팀원 각자의 동기나 팀원 사이의 관계까지 살피기 어려운 상황입니다.", "“내 일이 어디에 도움이 되는지 모르겠어요.”", "이번 주 팀원 한 명에게 “요즘 일하면서 언제 보람을 느껴요?”라고 물어보세요."]
+      },
+      reflect: ["우리 팀원 각자가 일에서 가장 보람을 느끼는 순간을 나는 알고 있나요?", "최근 회의에서 한 번도 말하지 않은 팀원이 있었나요? 그 이유는 무엇일까요?"],
+      drafts: ["나는 각자의 일이 왜 중요한지 연결해 주는 리더가 되겠다.", "나는 누구나 편하게 말할 수 있는 팀을 만드는 리더가 되겠다."],
+      iv: {
+        q1: ["최근 팀원들의 동기나 협력이 떨어졌다고 느낀 상황을 떠올려 주세요. 어떤 상황이었나요?",
+             ["반복 업무가 많아 팀원들이 지쳐 보였다", "팀원 사이에 갈등이나 신경전이 있었다", "회의에서 의견이 잘 나오지 않았다", "함께 하는 일에서 역할이 겹치거나 빠졌다"]],
+        q2: ["그때 나는 주로 어떻게 접근했나요?",
+             ["규칙과 역할을 정리해 다시 알려 주었다", "팀원들의 생각을 묻는 자리를 만들었다", "개별적으로 만나 마음을 살폈다", "팀원들끼리 풀어 가도록 지켜보았다"]],
+        q4: ["같은 상황이 다시 온다면, 무엇을 바꿔 보고 싶나요?",
+             ["팀원마다 무엇이 동기가 되는지 1:1로 물어보기", "각자의 업무가 팀 목표에 어떻게 연결되는지 설명하기", "회의에서 모든 의견을 끝까지 듣는 원칙 지키기", "협업 과제를 시작할 때 역할과 공유 시점 정하기"]]
+      },
+      items: [
+        { n: 11, label: "동기 요인 고려", scene: "도전적인 신규 과제가 생겼습니다. 팀원 A는 성장 기회를, 팀원 B는 안정적인 업무를 중요하게 생각하는 편입니다.",
+          opts: ["공정하게 순번대로 맡긴다", "역량이 가장 높은 사람에게 맡긴다", "성장 기회를 원하는 A에게 맡긴다", "두 사람과 각각 이야기해 무엇을 중요하게 여기는지 확인한 뒤 역할을 나눈다"],
+          team: "내가 원하는 것과 상관없이 일이 주어진다고 느껴, 일에 대한 애착이 약해집니다." },
+        { n: 12, label: "갈등 조정", scene: "두 팀원이 업무 범위를 두고 신경전을 벌이다가, 한 명이 먼저 찾아와 상대에 대한 불만을 이야기합니다.",
+          opts: ["둘이 알아서 풀도록 지켜본다", "찾아온 팀원의 이야기를 듣고 상대 팀원에게 주의를 준다", "두 사람을 함께 불러 서로 조금씩 양보하라고 한다", "두 사람의 이야기를 각각 듣고 사실관계를 확인한 뒤, 함께 만나 업무 범위를 정리한다"],
+          team: "한쪽 편을 든다거나 문제가 방치된다고 느껴, 팀에 대한 신뢰가 떨어집니다." },
+        { n: 13, label: "존중 분위기", scene: "회의에서 막내 팀원이 의견을 말하자, 선임 팀원이 “그건 현실을 몰라서 하는 소리”라며 말을 끊습니다.",
+          opts: ["선임의 경험이 맞는 경우가 많으니 그대로 회의를 진행한다", "회의가 끝난 뒤 막내에게 신경 쓰지 말라고 위로한다", "회의가 끝난 뒤 선임에게 따로 말투를 조심해 달라고 한다", "그 자리에서 막내가 말을 끝까지 하도록 하고, 서로 의견을 끝까지 듣자는 회의 원칙을 다시 이야기한다"],
+          team: "의견을 냈다가 무시당할까 봐, 회의에서 말을 아끼게 됩니다." },
+        { n: 14, label: "업무 의미 연결", scene: "매달 반복되는 데이터 정리 업무를 맡은 팀원이 “이걸 누가 보기는 하나요?”라고 묻습니다.",
+          opts: ["원래 해야 하는 업무라고 설명한다", "중요한 업무라고 말하며 격려한다", "이 데이터가 어느 보고서에 들어가는지 알려준다", "이 데이터가 실제로 어떤 결정에 쓰였는지 사례를 보여주고, 더 쓸모 있게 만들 방법이 있을지 의견을 묻는다"],
+          team: "내 일이 의미 없다고 느껴, 최소한만 하게 됩니다." },
+        { n: 15, label: "협력 조율", scene: "두 팀원이 함께 맡은 과제에서, 서로 상대가 할 일이라고 생각하는 바람에 일부 업무가 빠졌습니다.",
+          opts: ["둘이 잘 협의해서 마무리하라고 한다", "빠진 업무를 한 사람에게 맡긴다", "빠진 업무의 담당자를 정하고, 앞으로 잘 챙기자고 한다", "두 사람과 과제의 목표를 다시 확인하고, 업무별 담당자와 중간 공유 시점을 함께 정한다"],
+          team: "서로 미루거나 겹치는 일이 생겨, 협업 자체를 부담스럽게 느낍니다." }
+      ]
+    },
+    {
+      code: "D", name: "마인드셋", en: "Mindset", sub: "리더의 태도 · 신뢰 · 문제해결",
+      strongPhrase: "해결 중심으로 생각하고 스스로를 돌아보는 데", weakPhrase: "내 판단을 돌아보고 기준을 일관되게 지키는 부분",
+      cards: {
+        strong: ["문제가 생기면 해결을 먼저 찾고, 내 판단이 틀렸을 때 인정하며 스스로를 돌아봅니다.", "“팀장님이 먼저 인정하시니 우리도 실수를 숨기지 않아요.”", "내가 판단을 바꾼 경험을 팀에 이야기해서, 팀원도 시도하고 수정하는 것을 편하게 여기도록 해 보세요."],
+        mid: ["대체로 열린 태도를 갖고 있지만, 압박이 큰 상황에서는 기존 방식이나 내 판단을 고수하기도 합니다.", "“평소엔 유연하신데, 급할 땐 의견을 내기 어려워요.”", "다음 결정을 내리기 전에 “내가 놓친 게 있을까요?”라고 한 번 물어보세요."],
+        low: ["바쁜 상황에서 책임 소재를 먼저 따지거나, 내 판단을 다시 돌아볼 여유가 부족한 편입니다.", "“문제가 생기면 먼저 숨기고 싶어져요.”", "이번 주에 문제가 생기면 “누가”보다 “어떻게 해결할까”를 첫 질문으로 해 보세요."]
+      },
+      reflect: ["최근 팀원에게 “내가 틀렸다”고 말한 적이 있나요?", "내가 팀원에게 요구하는 것 중, 나 스스로는 잘 지키지 못하는 것은 무엇인가요?"],
+      drafts: ["나는 틀렸을 때 먼저 인정하는 리더가 되겠다.", "나는 내가 정한 기준을 가장 먼저 지키는 리더가 되겠다."],
+      iv: {
+        q1: ["최근 자신의 판단을 수정하거나 업무 방식을 바꿔야 했던 경험을 떠올려 주세요. 어떤 상황이었나요?",
+             ["내 결정이 예상과 다른 결과를 냈다", "팀원이 내 방식에 반대 의견을 냈다", "기존 방식으로는 문제가 풀리지 않았다", "내 말이나 행동이 팀 분위기에 영향을 준 것을 알았다"]],
+        q2: ["그때 나는 주로 어떻게 했나요?",
+             ["빠르게 새 방향을 정해 팀에 알렸다", "팀원들과 무엇이 문제였는지 함께 이야기했다", "팀원들이 동요하지 않도록 분위기를 먼저 챙겼다", "상황이 자연스럽게 정리되기를 기다렸다"]],
+        q4: ["같은 상황이 다시 온다면, 무엇을 바꿔 보고 싶나요?",
+             ["내 판단이 틀렸을 때 팀 앞에서 먼저 인정하기", "팀원에게 요구하는 기준을 나에게도 똑같이 적용하기", "문제가 생기면 책임보다 해결책부터 이야기하기", "한 달에 한 번 팀원에게 내 리더십에 대한 의견 듣기"]]
+      },
+      items: [
+        { n: 16, label: "해결 중심 태도", scene: "고객사에 보낸 견적서 금액이 잘못 나간 것을 발견했습니다.",
+          opts: ["누가 작성하고 누가 검토했는지부터 확인한다", "담당자에게 경위서를 받고 수정본을 보내게 한다", "수정본을 먼저 보내고, 나중에 담당자에게 경위를 묻는다", "고객 대응과 수정을 먼저 마무리하고, 팀과 함께 재발을 막을 검토 절차를 만든다"],
+          team: "문제가 생기면 탓을 듣게 될까 봐, 문제를 늦게 알리거나 숨기게 됩니다." },
+        { n: 17, label: "기준의 일관성", scene: "팀에 “회의 자료는 하루 전에 공유”라는 규칙을 만들었습니다. 그런데 이번 주에 바빠서 내 자료를 당일 아침에 공유하게 됐습니다.",
+          opts: ["팀장은 일정이 많으니 어쩔 수 없다고 생각한다", "별말 없이 이번 주만 넘기고 다음부터 지킨다", "자료를 공유하면서 늦어서 미안하다고 말한다", "늦은 것을 인정하고, 나도 지킬 수 있도록 규칙이나 내 일정 관리 방식을 다시 점검한다"],
+          team: "리더의 기준이 이중적이라고 느껴, 규칙을 가볍게 여기게 됩니다." },
+        { n: 18, label: "오류 인정·수정", scene: "지난달 내가 밀어붙인 업무 프로세스 변경 때문에 오히려 처리 시간이 늘었다는 데이터가 나왔습니다.",
+          opts: ["적응 기간이라고 보고 조금 더 지켜본다", "팀원들에게 문제를 보완할 방법을 찾아 달라고 한다", "판단이 틀렸다고 인정하고 이전 방식으로 되돌린다", "판단이 틀렸다고 팀에 인정하고, 무엇이 문제였는지 함께 살펴 어떻게 바꿀지 정한다"],
+          team: "리더가 틀려도 인정하지 않는다고 느껴, 의견을 내도 소용없다고 생각합니다." },
+        { n: 19, label: "대안 탐색", scene: "반복되는 고객 불만을 기존 응대 매뉴얼대로 처리하고 있지만 줄어들지 않습니다.",
+          opts: ["매뉴얼대로 더 철저히 응대하라고 강조한다", "매뉴얼의 응대 문구를 손본다", "다른 팀이나 경쟁사는 어떻게 하는지 알아본다", "고객과 현장 팀원의 이야기를 직접 듣고 불만의 원인부터 다시 정의한 뒤, 여러 대안을 시험해 본다"],
+          team: "같은 방식만 반복된다고 느껴, 개선 아이디어를 내지 않게 됩니다." },
+        { n: 20, label: "자기성찰", scene: "퇴근 무렵, 오늘 회의에서 내가 한 말 때문에 한 팀원의 표정이 굳었던 것이 떠오릅니다.",
+          opts: ["업무상 필요한 말이었으니 크게 신경 쓰지 않는다", "다음부터는 조심해야겠다고 생각한다", "다음 날 그 팀원에게 가볍게 말을 건넨다", "다음 날 그 팀원에게 내 말이 어떻게 들렸는지 묻고, 오해가 있으면 바로잡는다"],
+          team: "리더의 말에 상처받아도 말할 곳이 없다고 느껴, 마음의 거리가 생깁니다." }
+      ]
+    }
+  ];
+
+  var Q3 = ["그때 팀원은 어떤 마음이었을 것 같나요? 그 일에 대한 팀원의 몰입은 어땠을까요?",
+    ["방향이 분명해져서 다시 힘을 냈을 것이다", "존중받는다고 느끼고 마음을 열었을 것이다", "겉으로는 따랐지만 속으로는 위축되거나 답답했을 것이다", "솔직히 잘 모르겠다. 물어본 적이 없다"]];
+
+  var ACK = {
+    1: "그 장면을 떠올린 채로 다음 질문에 답해 보세요.",
+    2: ["방향을 분명히 해 주면 팀원의 불안이 줄어듭니다. 그때 팀원은 어떻게 받아들였을까요?",
+        "스스로 답을 찾게 돕는 방식이네요. 그 과정에서 팀원은 어땠을까요?",
+        "팀원의 마음을 먼저 챙기셨네요. 그때 팀원이 실제로 느낀 것은 무엇이었을까요?",
+        "믿고 맡기는 방식이네요. 맡겨진 팀원은 어떤 마음이었을까요?"],
+    3: ["방향이 분명할 때 팀원은 다시 몰입합니다. 이 장면에서 내가 잘한 점을 기억해 두세요.",
+        "존중받는다는 느낌은 몰입의 가장 큰 바탕입니다.",
+        "솔직하게 돌아보셨습니다. 그 답답함을 줄이려면 무엇이 달라져야 할까요?",
+        "많은 리더가 같은 답을 합니다. 팀원에게 직접 물어보는 것 자체가 좋은 출발점입니다."],
+    4: "좋습니다. 이 행동을 성찰 카드에 담았습니다. 아래에서 내 말로 다듬어 보세요."
+  };
+
+  var EXAMPLE = [3,3,2,4,2, 2,3,1,2,2, 3,2,3,2,3, 3,3,4,3,3];
+  var KEY = "leadership-scenario-dx-v1";
+  var MARKS = ["①", "②", "③", "④", "⑤"];
+
+  /* ---------- Helpers ---------- */
+  var ITEMS = {};
+  DOMAINS.forEach(function (d) { d.items.forEach(function (it) { it.domain = d; ITEMS[it.n] = it; }); });
+  function byName(name) { for (var i = 0; i < DOMAINS.length; i++) if (DOMAINS[i].name === name) return DOMAINS[i]; return null; }
+  function $(id) { return document.getElementById(id); }
+  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
+  function fmt(x) { return x.toFixed(1); }
+  function perm(n) { // stable per-item option order
+    var a = [0, 1, 2, 3], s = n * 7919 + 104729;
+    for (var i = 3; i > 0; i--) { s = (s * 9301 + 49297) % 233280; var j = Math.floor(s / 233280 * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; }
+    return a;
+  }
+  function band(a) { return a >= 3.5 ? "strong" : a >= 2.8 ? "mid" : "low"; }
+  var BAND_LABEL = { strong: "강점", mid: "안정적", low: "보완 필요" };
+
+  /* ---------- State ---------- */
+  function freshState() { return { answers: {}, example: false, focus: null, iv: {}, card: { name: "", keep: null, change: null, decl: "" } }; }
+  var state = freshState();
+  try {
+    var saved = JSON.parse(localStorage.getItem(KEY) || "null");
+    if (saved && saved.answers) { state = Object.assign(freshState(), saved); state.card = Object.assign(freshState().card, saved.card || {}); }
+  } catch (e) {}
+  function save() { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {} }
+  function ivFor(name) { if (!state.iv[name]) state.iv[name] = { picks: {}, notes: {} }; return state.iv[name]; }
+
+  /* ---------- Stage 1: diagnosis ---------- */
+  $("questions").innerHTML = DOMAINS.map(function (d) {
+    var items = d.items.map(function (it) {
+      var order = perm(it.n);
+      var opts = order.map(function (oi, pos) {
+        var id = "q" + it.n + "_" + (oi + 1);
+        return '<input type="radio" name="q' + it.n + '" id="' + id + '" value="' + (oi + 1) + '">' +
+          '<label for="' + id + '"><span class="mk">' + MARKS[pos] + '</span><span>' + esc(it.opts[oi]) + '</span></label>';
+      }).join("");
+      return '<div class="item" id="item' + it.n + '"><div class="item-q"><span class="num">' + it.n + '</span><div>' +
+        '<span class="item-label">' + esc(it.label) + '</span><p class="scene" id="s' + it.n + '">' + esc(it.scene) + '</p></div></div>' +
+        '<fieldset aria-labelledby="s' + it.n + '"><div class="opts">' + opts + '</div></fieldset></div>';
+    }).join("");
+    return '<div class="domain" id="dom' + d.code + '"><div class="domain-head"><span class="code">' + d.code + '</span><h3>' + d.name +
+      '</h3><span class="sub">' + d.en + ' · ' + d.sub + '</span></div>' + items + '</div>';
+  }).join("");
+
+  $("questions").addEventListener("change", function (e) {
+    var t = e.target;
+    if (t.type !== "radio") return;
+    state.answers[+t.name.slice(1)] = +t.value;
+    state.example = false;
+    save(); update();
+  });
+
+  function count() { var c = 0; for (var n = 1; n <= 20; n++) if (state.answers[n]) c++; return c; }
+
+  /* ---------- Stage 2: results ---------- */
+  function compute() {
+    var avgs = DOMAINS.map(function (d) {
+      var s = 0; d.items.forEach(function (it) { s += state.answers[it.n]; });
+      return { d: d, avg: Math.round(s / 5 * 10) / 10 };
+    });
+    var vals = avgs.map(function (a) { return a.avg; });
+    var min = Math.min.apply(null, vals), max = Math.max.apply(null, vals);
+    var all = []; for (var n = 1; n <= 20; n++) all.push(ITEMS[n]);
+    var lowest = all.slice().sort(function (a, b) { return (state.answers[a.n] - state.answers[b.n]) || (a.n - b.n); }).slice(0, 3);
+    var highest = all.slice().sort(function (a, b) { return (state.answers[b.n] - state.answers[a.n]) || (a.n - b.n); }).slice(0, 2);
+    return {
+      avgs: avgs, min: min, max: max,
+      lowNames: avgs.filter(function (a) { return a.avg === min; }).map(function (a) { return a.d.name; }),
+      highNames: avgs.filter(function (a) { return a.avg === max; }).map(function (a) { return a.d.name; }),
+      lowest: lowest, highest: highest
+    };
+  }
+
+  function renderResult(r) {
+    var isLow = function (name) { return r.lowNames.indexOf(name) !== -1; };
+    var sumHtml;
+    if (r.max === r.min) {
+      sumHtml = "네 영역이 <b>" + fmt(r.max) + "점</b>으로 고르게 나타났습니다. 영역보다 아래의 <b>내 선택 되짚기</b>에서 구체적인 행동을 살펴보세요.";
+    } else {
+      var hi = r.avgs.filter(function (a) { return a.avg === r.max; })[0], lo = r.avgs.filter(function (a) { return a.avg === r.min; })[0];
+      sumHtml = esc(hi.d.strongPhrase) + "는 강점이 있습니다 <b>(" + hi.d.name + " " + fmt(hi.avg) + ")</b>. 반면 " + esc(lo.d.weakPhrase) + "에는 여백이 있습니다 <b>(" + lo.d.name + " " + fmt(lo.avg) + ")</b>.";
+    }
+    $("summary").innerHTML = sumHtml;
+
+    $("bars").innerHTML = r.avgs.map(function (a) {
+      var w = (a.avg - 1) / 3 * 100;
+      return '<div class="bar-row' + (isLow(a.d.name) && r.max !== r.min ? " low" : "") + '"><span class="name">' + a.d.name + '</span>' +
+        '<div class="bar-track" role="img" aria-label="' + a.d.name + ' ' + fmt(a.avg) + '점"><i style="width:' + Math.max(w, 2) + '%"></i></div>' +
+        '<span class="val">' + fmt(a.avg) + '</span></div>';
+    }).join("");
+
+    $("dcards").innerHTML = r.avgs.map(function (a) {
+      var b = band(a.avg), c = a.d.cards[b];
+      return '<div class="dcard' + (b === "low" ? " low" : "") + '"><div class="dcard-head"><b>' + a.d.name + '</b>' +
+        '<span><span class="score">' + fmt(a.avg) + '</span> <span class="pill ' + b + '">' + BAND_LABEL[b] + '</span></span></div>' +
+        '<dl class="fb"><div><dt>지금의 모습</dt><dd>' + esc(c[0]) + '</dd></div>' +
+        '<div><dt>팀원은 이렇게 느낄 수 있습니다</dt><dd class="quote">' + esc(c[1]) + '</dd></div>' +
+        '<div><dt>이번 주에 해볼 것</dt><dd>' + esc(c[2]) + '</dd></div></dl></div>';
+    }).join("");
+
+    $("lowest").innerHTML = r.lowest.map(function (it) {
+      var sc = state.answers[it.n];
+      var body = '<dl class="fb"><div><dt>나의 선택</dt><dd>' + esc(it.opts[sc - 1]) + '</dd></div>';
+      if (sc < 4) {
+        body += '<div><dt>팀원 입장에서는</dt><dd>' + esc(it.team) + '</dd></div>' +
+                '<div><dt>한 걸음 더</dt><dd>' + esc(it.opts[3]) + '</dd></div>';
+      } else {
+        body += '<div><dt>참고</dt><dd>이 상황에서도 가장 적극적인 행동을 골랐습니다. 실제 현장에서도 그렇게 하고 있는지 돌아보세요.</dd></div>';
+      }
+      body += '</dl>';
+      return '<li><div class="top"><span><span class="num">' + it.n + '</span> <b>' + esc(it.label) + '</b> <span class="meta">· ' + it.domain.name + '</span></span>' +
+        '<span class="score">' + sc + '점</span></div><p class="meta">' + esc(it.scene) + '</p>' + body + '</li>';
+    }).join("");
+  }
+
+  /* ---------- Stage 3: interview ---------- */
+  function ivQuestions(d) {
+    return [d.iv.q1, d.iv.q2, Q3, d.iv.q4];
+  }
+  function ivDone(name) { var v = state.iv[name]; return !!(v && v.picks[4] !== undefined && v.picks[4] !== null); }
+
+  function renderInterview(r) {
+    if (!state.focus || !byName(state.focus)) state.focus = r.lowNames[0];
+    var multi = r.lowNames.length > 1 && r.max !== r.min;
+    $("focusHint").textContent = r.max === r.min
+      ? "네 영역 점수가 같습니다. 지금 가장 마음에 걸리는 영역을 골라 주세요."
+      : multi ? "가장 낮은 영역이 " + r.lowNames.join(", ") + "(으)로 같습니다. 지금 더 마음에 걸리는 영역을 골라 주세요."
+      : "가장 낮은 영역인 " + r.lowNames[0] + "을(를) 추천했습니다. 다른 영역을 돌아보고 싶다면 바꿔도 됩니다.";
+    $("focusPick").innerHTML = DOMAINS.map(function (d) {
+      var tag = (r.lowNames.indexOf(d.name) !== -1 && r.max !== r.min) ? " (최저)" : "";
+      return '<button type="button" data-focus="' + d.name + '" aria-pressed="' + (d.name === state.focus) + '">' + d.name + tag + '</button>';
+    }).join("");
+    var d = byName(state.focus);
+    $("reflectQs").innerHTML = d.reflect.map(function (q) { return "<li>" + esc(q) + "</li>"; }).join("");
+
+    var v = ivFor(d.name), qs = ivQuestions(d), html = "";
+    for (var k = 1; k <= 4; k++) {
+      if (k > 1 && (v.picks[k - 1] === undefined || v.picks[k - 1] === null)) break;
+      var q = qs[k - 1], pick = v.picks[k];
+      var opts = q[1].concat(["직접 쓰기"]).map(function (txt, i) {
+        var id = "iv" + k + "_" + i;
+        return '<input type="radio" name="iv' + k + '" id="' + id + '" value="' + i + '"' + (pick === i ? " checked" : "") + '>' +
+          '<label for="' + id + '"><span class="mk">' + MARKS[i] + '</span><span>' + esc(txt) + '</span></label>';
+      }).join("");
+      var ack = "";
+      if (pick !== undefined && pick !== null) {
+        var a = k === 1 ? ACK[1] : k === 4 ? ACK[4] : (pick < 4 ? ACK[k][pick] : (k === 2 ? "나만의 방식을 적어 주셨네요. 그때 팀원은 어떻게 받아들였을까요?" : "적어 주신 내용을 성찰 카드에 담겠습니다."));
+        ack = '<p class="ack">' + esc(a) + '</p>';
+      }
+      html += '<div class="ivq" id="ivq' + k + '"><span class="qn">Q' + k + ' / 4</span><h4 id="ivh' + k + '">' + esc(q[0]) + '</h4>' +
+        '<fieldset aria-labelledby="ivh' + k + '"><div class="opts">' + opts + '</div></fieldset>' +
+        '<textarea id="ivn' + k + '" data-k="' + k + '" aria-label="Q' + k + ' 메모" placeholder="' + (pick === 4 ? "직접 적어 주세요." : "떠오르는 장면이나 내가 했던 말을 적어 보세요. (선택)") + '">' + esc(v.notes[k] || "") + '</textarea>' + ack + '</div>';
+    }
+    $("iv").innerHTML = html;
+  }
+
+  $("focusPick").addEventListener("click", function (e) {
+    var b = e.target.closest("button[data-focus]");
+    if (!b) return;
+    state.focus = b.getAttribute("data-focus");
+    state.card.change = null; // re-prefill from the new interview
+    save(); update();
+  });
+
+  $("iv").addEventListener("change", function (e) {
+    var t = e.target;
+    if (t.type !== "radio") return;
+    var k = +t.name.slice(2), v = ivFor(state.focus);
+    v.picks[k] = +t.value;
+    if (k === 4) state.card.change = null;
+    save(); update();
+    var next = $("ivq" + (k + 1));
+    if (+t.value === 4) { var ta = $("ivn" + k); if (ta) ta.focus(); }
+    else if (next) next.scrollIntoView({ behavior: "smooth", block: "center" });
+    else if (k === 4) $("stage4").scrollIntoView({ behavior: "smooth", block: "start" });
+  });
+  $("iv").addEventListener("input", function (e) {
+    var t = e.target;
+    if (t.tagName !== "TEXTAREA") return;
+    var k = +t.getAttribute("data-k");
+    ivFor(state.focus).notes[k] = t.value;
+    save(); renderCardText();
+  });
+
+  /* ---------- Stage 4: reflection card ---------- */
+  function answerText(d, k) {
+    var v = ivFor(d.name), pick = v.picks[k], note = (v.notes[k] || "").trim();
+    if (pick === undefined || pick === null) return "";
+    if (pick === 4) return note;
+    return ivQuestions(d)[k - 1][1][pick];
+  }
+
+  function patternText(d) {
+    var v = ivFor(d.name), p2 = v.picks[2], p3 = v.picks[3];
+    var s1 = p2 === 4 ? d.name + " 상황에서 나는 ‘" + (answerText(d, 2) || "나만의 방식") + "’ 방식으로 대응했습니다."
+                       : d.name + " 상황에서 나는 " + STYLE_NAMES[p2] + "으로 대응하는 편입니다.";
+    var s2 = ["이 방식은 팀원에게 방향을 분명히 해 주는 힘이 있습니다.",
+              "이 방식은 팀원이 존중받는다고 느끼게 하는 힘이 있습니다.",
+              "다만 팀원은 겉으로 따르면서도 속으로는 위축되거나 답답했을 수 있습니다.",
+              "다만 팀원이 실제로 어떻게 느꼈는지는 아직 확인하지 못했습니다."][p3];
+    if (p3 === 4) s2 = "팀원은 ‘" + (answerText(d, 3) || "") + "’라고 느꼈을 것 같다고 답했습니다.";
+    var sit = answerText(d, 1);
+    return (sit ? "떠올린 장면: " + sit + ". " : "") + s1 + " " + s2;
+  }
+
+  function renderCard(r) {
+    var d = byName(state.focus);
+    if (state.card.keep === null) {
+      state.card.keep = r.highest.map(function (it) { return it.label + ": " + it.opts[state.answers[it.n] - 1]; }).join("\n");
+    }
+    if (state.card.change === null) {
+      var c = answerText(d, 4);
+      state.card.change = c ? "다음 2주 동안, " + c : "";
+    }
+    $("keepText").value = state.card.keep;
+    $("changeText").value = state.card.change;
+    $("declText").value = state.card.decl || "";
+    $("whoName").value = state.card.name || "";
+    $("today").textContent = new Date().toLocaleDateString("ko-KR");
+    $("cardScores").textContent = r.avgs.map(function (a) { return a.d.name + " " + fmt(a.avg); }).join(" · ") + "  |  성찰 영역: " + d.name;
+    $("cardPattern").textContent = patternText(d);
+    $("drafts").innerHTML = '<span class="hint">초안을 눌러 고른 뒤 내 말로 고쳐 쓰세요.</span>' + d.drafts.map(function (t) {
+      return '<button type="button" data-draft="' + esc(t) + '">' + esc(t) + '</button>';
+    }).join("");
+    renderCardText();
+  }
+
+  function resultText(r) {
+    var lines = ["[리더십 셀프진단 결과]", r.avgs.map(function (a) { return a.d.name + " " + fmt(a.avg) + "/4"; }).join(" / "), "점수가 가장 낮은 상황:"];
+    r.lowest.forEach(function (it) { lines.push("- " + it.n + ". " + it.label + " (" + state.answers[it.n] + "점): " + it.scene + " → 나의 선택: " + it.opts[state.answers[it.n] - 1]); });
+    lines.push("성찰 영역: " + state.focus);
+    return lines.join("\n");
+  }
+
+  function cardText() {
+    var d = byName(state.focus);
+    return ["[나의 리더십 성찰 카드]" + (state.card.name ? " " + state.card.name : ""),
+      "진단에서 본 나: " + $("cardScores").textContent,
+      "인터뷰에서 발견한 나의 패턴: " + patternText(d),
+      "유지할 리더십 행동: " + (state.card.keep || ""),
+      "변화시킬 리더십 행동: " + (state.card.change || ""),
+      "2027년 나의 리더십 선언: " + (state.card.decl || "")].join("\n");
+  }
+
+  var PROMPT = [
+    "# 역할",
+    "당신은 팀장의 리더십 성찰을 돕는 리더십 코치입니다. 평가하거나 정답을 알려주지 않고, 질문을 통해 팀장이 스스로 리더십 행동을 돌아보고 구성원의 몰입을 높이는 행동을 찾도록 돕습니다.",
+    "",
+    "# 나의 진단 결과와 1차 성찰",
+    "{{RESULT}}",
+    "",
+    "{{CARD}}",
+    "",
+    "# 진행 방식",
+    "1. 위 내용을 2~3문장으로 요약합니다. 점수가 좋다/나쁘다는 평가는 하지 않습니다.",
+    "2. 성찰 카드의 '변화시킬 리더십 행동'을 실제로 실천할 수 있도록 후속 질문을 3~4개, 한 번에 하나씩 합니다.",
+    "   흐름: 그 행동이 필요한 구체적 장면 → 실천을 막는 것 → 팀원이 느낄 변화 → 실천을 확인할 방법",
+    "3. 모든 질문에는 서로 다른 접근을 담은 보기 4개와 '⑤ 직접 쓰기'를 함께 제시하고, 보기 사이에 우열이 드러나지 않게 씁니다.",
+    "4. 답을 들으면 1~2문장으로 공감하고 핵심을 되짚은 뒤 다음 질문으로 넘어갑니다.",
+    "5. 마지막에 유지할 행동, 변화시킬 행동, 2027년 리더십 선언을 다듬어 정리합니다.",
+    "",
+    "# 규칙",
+    "- 질문은 한 번에 하나만 합니다.",
+    "- 인터뷰 중에는 조언이나 훈계를 하지 않습니다.",
+    "- 존댓말을 쓰고, 따뜻하고 간결하게 말합니다.",
+    "- 팀원 실명이나 민감한 인사 정보 대신 '팀원 A'처럼 말해 달라고 처음에 안내합니다."
+  ].join("\n");
+
+  function renderCardText() {
+    if (!count() || count() < 20) return;
+    var r = compute();
+    $("aiPrompt").value = PROMPT.replace("{{RESULT}}", resultText(r)).replace("{{CARD}}", cardText());
+  }
+
+  $("drafts").addEventListener("click", function (e) {
+    var b = e.target.closest("button[data-draft]");
+    if (!b) return;
+    state.card.decl = b.getAttribute("data-draft");
+    $("declText").value = state.card.decl;
+    $("declText").focus();
+    save(); renderCardText();
+  });
+  [["keepText", "keep"], ["changeText", "change"], ["declText", "decl"], ["whoName", "name"]].forEach(function (p) {
+    $(p[0]).addEventListener("input", function () { state.card[p[1]] = $(p[0]).value; save(); renderCardText(); });
+  });
+
+  function copy(text, ta, statusEl, okMsg) {
+    function fallback() {
+      if (ta) { ta.focus(); ta.select(); statusEl.textContent = "선택된 내용을 Ctrl+C(⌘+C)로 복사하세요."; }
+      else statusEl.textContent = "복사하지 못했습니다. 브라우저 권한을 확인해 주세요.";
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(function () { statusEl.textContent = okMsg; }, fallback);
+    else fallback();
+  }
+  $("copyCardBtn").addEventListener("click", function () { copy(cardText(), null, $("copyCardStatus"), "복사했습니다."); });
+  $("copyAiBtn").addEventListener("click", function () { copy($("aiPrompt").value, $("aiPrompt"), $("copyAiStatus"), "복사했습니다. AI 도구에 붙여넣으세요."); });
+  $("printBtn").addEventListener("click", function () { window.print(); });
+
+  /* ---------- Orchestration ---------- */
+  function syncInputs() {
+    for (var n = 1; n <= 20; n++) {
+      var v = state.answers[n];
+      document.querySelectorAll('input[name="q' + n + '"]').forEach(function (inp) { inp.checked = (+inp.value === v); });
+      $("item" + n).classList.toggle("done", !!v);
+      if (v) $("item" + n).classList.remove("missing");
+    }
+  }
+
+  function update() {
+    var c = count(), complete = c === 20;
+    $("countNum").textContent = c;
+    syncInputs();
+    $("emptyState").hidden = complete;
+    $("resultBody").hidden = !complete;
+    $("exampleNote").hidden = !(complete && state.example);
+    $("emptyMsg").textContent = c === 0 ? "20개 상황에 모두 답하면 이곳에 결과가 나타납니다." : "아직 " + (20 - c) + "개 상황이 남았습니다. 모두 답하면 이곳에 결과가 나타납니다.";
+    $("exampleBtn").hidden = c > 0;
+    $("ivEmpty").hidden = complete;
+    $("ivBody").hidden = !complete;
+
+    var stage = 1, done4 = false;
+    if (complete) {
+      var r = compute();
+      renderResult(r);
+      renderInterview(r);
+      done4 = ivDone(state.focus);
+      $("cardEmpty").hidden = done4;
+      $("cardBody").hidden = !done4;
+      if (done4) renderCard(r);
+      stage = done4 ? 4 : 3;
+    } else {
+      $("cardEmpty").hidden = false; $("cardBody").hidden = true;
+    }
+    var ivAnswered = complete ? Object.keys(ivFor(state.focus).picks).length : 0;
+    var pct = complete ? 50 + Math.min(ivAnswered, 4) / 4 * 50 : c / 20 * 50;
+    $("trackFill").style.width = pct + "%";
+    ["nav1", "nav2", "nav3", "nav4"].forEach(function (id, i) {
+      var el = $(id), s = i + 1;
+      el.classList.toggle("done", (s === 1 && complete) || (s === 2 && complete) || (s === 3 && done4));
+      el.classList.toggle("on", s === (complete ? (done4 ? 4 : 3) : 1));
+    });
+    $("nextBtn").textContent = !complete ? (c === 0 ? "진단 시작" : "남은 문항으로") : done4 ? "성찰 카드 보기" : "인터뷰로";
+  }
+
+  $("nextBtn").addEventListener("click", function () {
+    if (count() < 20) {
+      var first = null;
+      for (var n = 1; n <= 20; n++) if (!state.answers[n]) { if (count() > 0) $("item" + n).classList.add("missing"); if (!first) first = n; }
+      $("item" + first).scrollIntoView({ behavior: "smooth", block: "start" });
+      return;
+    }
+    if (!ivDone(state.focus)) {
+      var v = ivFor(state.focus), k = 1;
+      while (k <= 4 && v.picks[k] !== undefined && v.picks[k] !== null) k++;
+      var el = $("ivq" + Math.min(k, 4));
+      (k === 1 ? $("stage2") : el || $("stage3")).scrollIntoView({ behavior: "smooth", block: "start" });
+      return;
+    }
+    $("stage4").scrollIntoView({ behavior: "smooth", block: "start" });
+  });
+
+  $("exampleBtn").addEventListener("click", function () {
+    EXAMPLE.forEach(function (v, i) { state.answers[i + 1] = v; });
+    state.example = true;
+    save(); update();
+    $("stage2").scrollIntoView({ behavior: "smooth", block: "start" });
+  });
+
+  function showResetButton() { $("resetArea").innerHTML = '<button class="btn" id="resetBtn" type="button">응답 모두 지우기</button>'; }
+  $("resetArea").addEventListener("click", function (e) {
+    var id = e.target.id;
+    if (id === "resetBtn") {
+      $("resetArea").innerHTML = '<div class="confirm"><span>진단, 인터뷰, 성찰 카드 내용을 모두 지울까요? 되돌릴 수 없습니다.</span>' +
+        '<button class="btn primary" id="resetYes" type="button">지우기</button><button class="btn" id="resetNo" type="button">취소</button></div>';
+      $("resetNo").focus();
+    } else if (id === "resetYes") {
+      state = freshState(); save(); showResetButton();
+      document.querySelectorAll(".item.missing").forEach(function (el) { el.classList.remove("missing"); });
+      update(); window.scrollTo({ top: 0, behavior: "smooth" });
+    } else if (id === "resetNo") { showResetButton(); $("resetBtn").focus(); }
+  });
+
+  update();
+})();
+</script>
+</body>
+</html>
